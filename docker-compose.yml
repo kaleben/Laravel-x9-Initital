@@ -1,7 +1,8 @@
 version: "3"
 services:
     # imagem
-    aovivo:
+    laravelApp:
+        container_name: app_laravel
         build:
             context: ./
             dockerfile: Dockerfile
@@ -11,20 +12,21 @@ services:
         volumes:
             - ./:/var/www
         networks:
-            - aovivo
+            - laravelNet
 
     # nginx
     nginx:
+        container_name: web_laravel
         image: nginx:alpine
         restart: unless-stopped
         ports:
-            - 8081:80
+            - 8008:80
         volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks:
-            - aovivo
+            - laravelNet
 
 networks:
-    aovivo:
+    laravelNet:
         driver: bridge
