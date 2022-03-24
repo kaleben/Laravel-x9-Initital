@@ -2,6 +2,7 @@
 
 ## Pré-requisitos
 
+É necessário ter instalado em sua máquina local os seguintes programas
 - Docker
 - Git
 
