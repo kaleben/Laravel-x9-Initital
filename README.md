@@ -1,64 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Guia de instalação
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Pré-requisitos
 
-## About Laravel
+- Docker
+- Git
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Clonando o projeto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Clone o repositorio em uma pasta local
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```cmd
+$ git clone https://github.com/kaleben/laravel9-initital.git nomeProjeto
+```
 
-## Learning Laravel
+Vá para dentro da pasta do projeto
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```cmd
+$ cd nomeProjeto
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+E edite o docker-compose.yml caso necessário.
 
-## Laravel Sponsors
+## Iniciando o container
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Agora rode o comando
 
-### Premium Partners
+```cmd
+$ docker-compose up -d
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Com isso o docker irá montar e subir as imagens. Por padrão o docker-compose vêm com app_laravel contendo o projeto em si e web_laravel apontando para o NGNIX.
 
-## Contributing
+## Acessando container e finalizando instalação
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+A partir desse ponto, você já é capaz de acessar seu localhost na porta definida no docker-compose (o padrão é 8008), com isse será retornado um erro na tela. Não se preocupe, esse comportamento já é esperado.
 
-## Code of Conduct
+Agora você precisa entrar dentro do seu container do app_laravel
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```cmd
+$ docker exec -it app_laravel /bin/bash
+```
 
-## Security Vulnerabilities
+No seu terminal irá aparecer algo como
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```cmd
+$ root@e73a431ceba8:/var/www#
+```
 
-## License
+Isso significa que você já está dentro do container do deu projeto, rodando o comando
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```cmd
+$ ls
+```
+
+Será possível ver todos os arquivos do Laravel.
+
+### Instalando packages
+
+Agora dentro do container, é necessário instalar os pacotes contidos no package.json. Para isso rode o comando
+
+```cmd
+$ composer install
+```
+
+Isso irá instalar todos os pacotes necessários.
+
+### Comandos NPM
+
+Agora para o funcionamento do bootstrap e fontawesome rode o comando
+
+```cmd
+$ npm install
+```
+
+Em seguida 
+
+```cmd
+$ npm run @development
+```
+Com isso seu projeto está 99% configurado!
+
+### Criando o arquivo .env
+
+Para finalizar rode o comando
+
+```cmd
+$ cp .env.example ./.env
+```
+
+Isso criará o arquivo .env com base no .env.example. Então rode o comando
+
+```cmd
+$ php artisan key:generate
+```
+
+e
+
+```cmd
+$ exit
+```
+
+Para sair do container
+
+### Pronto!
+
+Tudo pronto! agora acessando novamente o localhost em seu navegador já será possível ver a página Welcome padrão do Laravel.
